@@ -12,8 +12,9 @@ help:			## Show this help
 dev:			## Start dashboard dev server
 	cd extension/dashboard && npm run dev
 
-build:			## Build dashboard for production
+build:			## Build dashboard + background worker for production
 	cd extension/dashboard && npm run build
+	cd extension && npx vite build --config vite.background.config.ts
 
 release: build		## Build and package extension as a distributable ZIP
 	@rm -rf release && mkdir -p release/chatgpt-to-claude
