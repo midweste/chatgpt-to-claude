@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="docs/assets/hero-banner.png" alt="ChatGPT to Claude Migration" width="100%" />
-</p>
-
 <h1 align="center">ChatGPT → Claude Migration</h1>
 
 <p align="center">
@@ -19,6 +15,21 @@
 
 <br />
 
+<table>
+  <tr>
+    <td align="center" width="33%">Download</td>
+    <td align="center" width="33%">Connect</td>
+    <td align="center" width="33%">Migrate</td>
+  </tr>
+  <tr>
+    <td><img src="docs/assets/download.png" alt="Download conversations from ChatGPT" /></td>
+    <td><img src="docs/assets/connect-claude.png" alt="Connect to Claude" /></td>
+    <td><img src="docs/assets/migrate.png" alt="Migrate conversations" /></td>
+  </tr>
+</table>
+
+<br />
+
 ## ✨ Features
 
 🔄 **Full Migration** — Conversations, memories, and custom instructions  
@@ -31,26 +42,6 @@
 🧠 **Memory Export** — Migrate your ChatGPT memories as a Claude document  
 📝 **Instruction Export** — Transfer custom instructions to Claude project prompts  
 📜 **Structured Logs** — Full operation log viewable in the dashboard
-
-
-<br />
-
-## 🖼️ Screenshots
-
-<p align="center">
-  <img src="docs/assets/download.png" width="80%" alt="Download conversations from ChatGPT" />
-</p>
-<p align="center"><em>Step 1 — Download your ChatGPT conversations</em></p>
-
-<p align="center">
-  <img src="docs/assets/connect-claude.png" width="80%" alt="Connect to Claude" />
-</p>
-<p align="center"><em>Step 2 — Connect to Claude and configure import settings</em></p>
-
-<p align="center">
-  <img src="docs/assets/migrate.png" width="80%" alt="Migrate conversations" />
-</p>
-<p align="center"><em>Step 3 — Select and migrate conversations to Claude</em></p>
 
 <br />
 
@@ -84,7 +75,32 @@ No build tools required — just download and load.
 
 <br />
 
-## 🏗️ Architecture
+## ⚖️ Disclaimer
+
+This is an independent, open-source project. It is **not affiliated with, endorsed by, or sponsored by OpenAI or Anthropic**.
+
+- "ChatGPT" is a trademark of OpenAI. "Claude" is a trademark of Anthropic. These names are used solely for descriptive purposes to identify the platforms this tool interacts with.
+- This extension acts on behalf of **you, the authenticated user** — it uses your own browser sessions to access your own data. It does not bypass authentication, circumvent access controls, or access other users' data.
+- **Your data belongs to you.** This tool helps you export and migrate your own conversations, memories, and instructions. No data is sent to any third-party server.
+- Users are responsible for reviewing and complying with the terms of service of any platforms they use this extension with.
+- This project is provided "as is" without warranty. See [LICENSE](LICENSE) for details.
+
+<br />
+
+## 📄 License
+
+[MIT](LICENSE)
+
+<br />
+
+---
+
+<details>
+<summary><strong>🛠️ For Contributors & Developers</strong></summary>
+
+<br />
+
+### Architecture
 
 ```
 extension/
@@ -113,9 +129,7 @@ extension/
 | **Shared lib**  | Business logic is React-free — testable and framework-independent        |
 | **IndexedDB**   | Extension-scoped, clearable from Settings, no localStorage               |
 
-<br />
-
-## 📦 Tech Stack
+### Tech Stack
 
 | Layer         | Technology                         |
 | ------------- | ---------------------------------- |
@@ -125,17 +139,6 @@ extension/
 | **State**     | Zustand 5                          |
 | **Tables**    | TanStack Table v8                  |
 | **Testing**   | Vitest, 340 tests, v8 coverage     |
-
-<br />
-
-## 🛠️ Development
-
-For contributors who want to build from source:
-
-### Prerequisites
-
-- **Node.js** ≥ 20
-- **npm**
 
 ### Setup
 
@@ -164,23 +167,7 @@ cd extension/dashboard && npm install && cd ../..
 3. **Load unpacked** → select `extension/`
 4. Dashboard changes hot-reload with `make dev`, but background worker changes need `make build` + extension reload
 
-<br />
-
-## 📄 License
-
-[MIT](LICENSE)
-
-<br />
-
-## ⚖️ Disclaimer
-
-This is an independent, open-source project. It is **not affiliated with, endorsed by, or sponsored by OpenAI or Anthropic**.
-
-- "ChatGPT" is a trademark of OpenAI. "Claude" is a trademark of Anthropic. These names are used solely for descriptive purposes to identify the platforms this tool interacts with.
-- This extension acts on behalf of **you, the authenticated user** — it uses your own browser sessions to access your own data. It does not bypass authentication, circumvent access controls, or access other users' data.
-- **Your data belongs to you.** This tool helps you export and migrate your own conversations, memories, and instructions. No data is sent to any third-party server.
-- Users are responsible for reviewing and complying with the terms of service of any platforms they use this extension with.
-- This project is provided "as is" without warranty. See [LICENSE](LICENSE) for details.
+</details>
 
 <br />
 
