@@ -21,7 +21,10 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
+    "html-to-text": "^9.0.5",
     "jszip": "^3.10.1",
+    "marked": "^17.0.3",
+    "mustache": "^4.2.0",
     "react-markdown": "^10.1.0"
   }
 }
