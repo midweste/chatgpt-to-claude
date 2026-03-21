@@ -32,18 +32,25 @@
 📝 **Instruction Export** — Transfer custom instructions to Claude project prompts  
 📜 **Structured Logs** — Full operation log viewable in the dashboard
 
-<!--
+
 <br />
+
 ## 🖼️ Screenshots
 
-Add screenshots here:
 <p align="center">
-  <img src="docs/assets/screenshot-extract.png" width="45%" />
-  <img src="docs/assets/screenshot-migrate.png" width="45%" />
+  <img src="docs/assets/download.png" width="80%" alt="Download conversations from ChatGPT" />
 </p>
--->
+<p align="center"><em>Step 1 — Download your ChatGPT conversations</em></p>
 
-> Screenshots coming soon.
+<p align="center">
+  <img src="docs/assets/connect-claude.png" width="80%" alt="Connect to Claude" />
+</p>
+<p align="center"><em>Step 2 — Connect to Claude and configure import settings</em></p>
+
+<p align="center">
+  <img src="docs/assets/migrate.png" width="80%" alt="Migrate conversations" />
+</p>
+<p align="center"><em>Step 3 — Select and migrate conversations to Claude</em></p>
 
 <br />
 
