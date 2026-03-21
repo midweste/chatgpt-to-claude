@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AI Conversation Migrator",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Export and migrate your AI conversations, memories, and custom instructions. Supports ChatGPT and Claude.",
   "permissions": ["cookies", "storage", "webRequest"],
   "host_permissions": ["https://chatgpt.com/*", "https://claude.ai/*", "https://*.anthropic.com/*"],
