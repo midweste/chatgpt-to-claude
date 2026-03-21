@@ -1,0 +1,27 @@
+{
+  "name": "aimigration",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cd extension/dashboard && npm run dev",
+    "build": "cd extension/dashboard && npm run build && cd ../.. && npm run build:bg",
+    "build:bg": "cd extension && npx vite build --config vite.background.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.4",
+    "fake-indexeddb": "^6.2.5",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "jszip": "^3.10.1",
+    "react-markdown": "^10.1.0"
+  }
+}

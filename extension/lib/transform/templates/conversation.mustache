@@ -1,0 +1,23 @@
+{{{prefix}}}
+
+Conversation Title: {{title}}
+Conversation Date: {{created_at}}
+
+{{#messages}}
+{{#is_user}}
+[ 🧑 Human | {{date}} ]
+
+{{{content}}}
+
+{{/is_user}}
+{{^is_user}}
+[ 🤖 Assistant | {{date}} ]
+
+{{{content}}}
+
+{{/is_user}}
+{{/messages}}
+
+Conversation End. You have now read my full conversation history.
+
+{{{suffix}}}

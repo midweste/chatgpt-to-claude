@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            extension/dashboard/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd extension/dashboard && npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build extension
+        run: make build
+
+      - name: Package release ZIP
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          mkdir -p release/chatgpt-to-claude
+          cp extension/manifest.json release/chatgpt-to-claude/
+          cp extension/popup.html release/chatgpt-to-claude/
+          cp -r extension/icons release/chatgpt-to-claude/
+          cp -r extension/dist release/chatgpt-to-claude/
+          cd release && zip -r ../chatgpt-to-claude-v${VERSION}.zip chatgpt-to-claude/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: chatgpt-to-claude-v*.zip
+          generate_release_notes: true
