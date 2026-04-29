@@ -6,3 +6,4 @@ dist/
 coverage/
 local/ 
 PROJECT.md
+*.zip

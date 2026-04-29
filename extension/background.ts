@@ -13,6 +13,34 @@ import { USER_AGENT } from './lib/constants/shared';
 
 const COOKIE_NAME = '__Secure-next-auth.session-token';
 
+/**
+ * Get the ChatGPT session cookie value.
+ *
+ * Personal accounts use a single `__Secure-next-auth.session-token` cookie.
+ * Team/workspace accounts exceed the ~4KB cookie limit, so NextAuth splits
+ * the JWT into numbered chunks: `.0`, `.1`, `.2`, etc.
+ *
+ * Returns the cookie value (reassembled if chunked) or null if not logged in.
+ */
+async function getChatGPTSessionCookie(): Promise<string | null> {
+  // Try the single (non-chunked) cookie first — personal accounts
+  const single = await chrome.cookies.get({ url: CHATGPT_BASE, name: COOKIE_NAME });
+  if (single) return single.value;
+
+  // Try chunked cookies — Team/workspace accounts
+  const allCookies = await chrome.cookies.getAll({ url: CHATGPT_BASE });
+  const chunks = allCookies
+    .filter((c) => c.name.startsWith(`${COOKIE_NAME}.`))
+    .sort((a, b) => {
+      const numA = parseInt(a.name.split('.').pop() || '0', 10);
+      const numB = parseInt(b.name.split('.').pop() || '0', 10);
+      return numA - numB;
+    });
+
+  if (chunks.length === 0) return null;
+  return chunks.map((c) => c.value).join('');
+}
+
 // ── Types ──
 
 interface RecordedEntry {
@@ -148,45 +176,48 @@ chrome.action.onClicked.addListener(async () => {
 //   false = sendResponse was called synchronously
 
 function handleCheckChatgptLogin(_msg: ProxyMessage, sendResponse: SendResponse): boolean {
-  chrome.cookies.get(
-    { url: CHATGPT_BASE, name: COOKIE_NAME },
-    (cookie) => {
-      sendResponse({ loggedIn: !!cookie });
-    },
-  );
+  getChatGPTSessionCookie().then((value) => {
+    sendResponse({ loggedIn: value !== null });
+  });
   return true;
 }
 
 function handleGetAccessToken(_msg: ProxyMessage, sendResponse: SendResponse): boolean {
-  chrome.cookies.get(
-    { url: CHATGPT_BASE, name: COOKIE_NAME },
-    async (cookie) => {
-      if (!cookie) {
+  (async () => {
+    try {
+      const sessionValue = await getChatGPTSessionCookie();
+      if (!sessionValue) {
         sendResponse({ error: 'Not logged into ChatGPT. Please log in at chatgpt.com first.' });
         return;
       }
-      try {
-        const headers: Record<string, string> = {
-            Cookie: `${COOKIE_NAME}=${cookie.value}`,
-          };
-          if (USER_AGENT) headers['User-Agent'] = USER_AGENT;
-          const res = await fetch(`${CHATGPT_BASE}/api/auth/session`, { headers });
-        if (!res.ok) {
-          sendResponse({ error: `Session exchange failed: HTTP ${res.status}` });
-          return;
-        }
-        const data = await res.json();
-        if (!data.accessToken) {
-          sendResponse({ error: 'No accessToken in session response — token may be expired' });
-          return;
-        }
-        sendResponse({ accessToken: data.accessToken });
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : String(err);
-        sendResponse({ error: message });
+
+      // Build cookie header — for chunked cookies, send all chunks individually
+      // so NextAuth's server-side can reassemble them
+      const allCookies = await chrome.cookies.getAll({ url: CHATGPT_BASE });
+      const sessionCookies = allCookies.filter(
+        (c) => c.name === COOKIE_NAME || c.name.startsWith(`${COOKIE_NAME}.`),
+      );
+      const cookieStr = sessionCookies.map((c) => `${c.name}=${c.value}`).join('; ');
+
+      const headers: Record<string, string> = { Cookie: cookieStr };
+      if (USER_AGENT) headers['User-Agent'] = USER_AGENT;
+      const res = await fetch(`${CHATGPT_BASE}/api/auth/session`, { headers });
+
+      if (!res.ok) {
+        sendResponse({ error: `Session exchange failed: HTTP ${res.status}` });
+        return;
       }
-    },
-  );
+      const data = await res.json();
+      if (!data.accessToken) {
+        sendResponse({ error: 'No accessToken in session response — token may be expired' });
+        return;
+      }
+      sendResponse({ accessToken: data.accessToken });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      sendResponse({ error: message });
+    }
+  })();
   return true;
 }
 
